@@ -1,79 +1,144 @@
-const rockButton = document.querySelector('.rock');
-const paperButton = document.querySelector('.paper');
-const scissorButton = document.querySelector('.scissor');
+// Game
+let playerScore=0;
+let computerScore=0;
+let drawScore=0;
+let roundWinner="";
 
-let pOneScore=document.querySelector('.playerPicked');
-let pTwoScore=document.querySelector('.compPicked');
-let drawScore=document.querySelector('.drawCount');
-
-let gamesPlayed=0;
-let playerOneScore=0;
-let playerTwoScore=0;
-let drawScoreCount=0;
-
-const maxTurns=(max) => {
-    return computersPick=Math.floor(Math.random()*max);
-};
-
-const computersTurn=() => {
-    let computersPick=maxTurns(3);
-    return computerResult=
-    (computersPick===0) ? 'rock':
-    (computersPick===1) ? 'paper':
-    (computersPick===2) ? 'scissor':
-    '';
-};
-
-function draw(){
-    drawScore.textContent=drawScoreCount+=1;
+function playRound(playerSelection, computerSelection) {
+    if (playerSelection === computerSelection) {
+        drawScore++;
+        roundWinner='draw';
+    } else if (
+        (playerSelection==='rock'&&computerSelection==='scissors') ||
+        (playerSelection==='scissors'&& computerSelection==='paper') ||
+        (playerSelection==='paper' && computerSelection==='rock')
+    ) {
+        playerScore++;
+        roundWinner='player';
+    }
+    else {
+        computerScore++;
+        roundWinner='computer';
+    }
+    updateScoreMessage(roundWinner, playerSelection, computerSelection)
 }
-function updatePlayerOneScore(){
-    pOneScore.textContent=playerOneScore+=1;
-    if(playerOneScore===5) {
-        alert('Player One is the winner');
+
+function getRandomChoice() {
+    let randomNumber=Math.floor(Math.random()*3)
+    switch (randomNumber) {
+        case 0:
+            return 'rock';
+        case 1:
+            return 'paper';
+        case 2:
+            return 'scissors';
     }
-};
+}
 
-function updatePlayerTwoScore(){
-    pTwoScore.textContent=playerTwoScore+=1;
-    if(playerTwoScore===5){
-        alert('Player Two is the winner');
+function isGameOver() {
+    return playerScore===1000 || computerScore===1000;
+}
+
+// UI
+
+const scoreInfo = document.getElementById('scoreInfo');
+const scoreMessage = document.getElementById('scoreMessage');
+const playerScorePara = document.getElementById('playerScore');
+const computerScorePara = document.getElementById('computerScore');
+const drawScorePara = document.getElementById('drawScore');
+const playerSign = document.getElementById('playerSign');
+const computerSign = document.getElementById('computerSign');
+const rockBtn = document.getElementById('rockBtn');
+const paperBtn = document.getElementById('paperBtn');
+const scissorsBtn = document.getElementById('scissorsBtn');
+const restartBtn = document.getElementById('restartBtn');
+const endgameModal=document.getElementById('endgameModal');
+const overlay =document.getElementById('overlay');
+
+rockBtn.addEventListener('click', () => handleClick('rock'));
+paperBtn.addEventListener('click', () => handleClick('paper'));
+scissorsBtn.addEventListener('click', () => handleClick('scissors'));
+restartBtn.addEventListener('click', restartGame);
+overlay.addEventListener('click', closeEndgameModal)
+
+
+function handleClick(playerSelection) {
+    if (isGameOver()) {
+        openEndgameModal()
+        return;
     }
-};
+    const computerSelection=getRandomChoice();
+    playRound(playerSelection, computerSelection);
+    //updateChoices(playerSelection, computerSelection);
+    updateScore()
+    if (isGameOver()) {
+        openEndGameModal()
+        setFinalMessage()
+    }
+}
 
-function readyPlayerOne (e) {
-    const {value}=e.target;
-    switch(value){
-        case 'rock':
-            if(computersTurn() ==='rock'){
-                return draw();
-            } else if(computersTurn()==='paper'){
-                return updatePlayerTwoScore();
-            } else if(computersTurn() ==='scissor'){
-                return updatePlayerOneScore();
-            }
-            break;
-        case 'paper':
-            if(computersTurn()==='paper'){
-                return draw();
-            } else if(computersTurn()==='scissor'){
-                return updatePlayerTwoScore();
-            } else if(computersTurn()==='rock'){
-                return updatePlayerOneScore();
-            }
-        break;
-        case 'scissor':
-            if(computersTurn() === 'scissor'){
-                return draw();
-            } else if(computersTurn() === 'rock'){
-                return updatePlayerTwoScore();
-            } else if(computersTurn() === 'paper'){
-                return updatePlayerOneScore();
-            }
-        break;
-    };
-};
+function updateScore() {
+    if (roundWinner==='draw') {
+        scoreInfo.textContent="It's a draw!";
+    } else if (roundWinner==='player') {
+        scoreInfo.textContent="You won!";
+    } else if (roundWinner==='computer') {
+        scoreInfo.textContent='You lost!';
+    }
+    playerScorePara.textContent=`Player: ${playerScore}`;
+    drawScorePara.textContent=`Draw: ${drawScore}`;
+    computerScorePara.textContent=`Computer: ${computerScore}`;
+}
+function updateScoreMessage(winner, playerSelection, computerSelection) {
+    if (winner === 'player') {
+      scoreMessage.textContent = `${capitalizeFirstLetter(
+        playerSelection
+      )} beats ${computerSelection.toLowerCase()}`
+      return
+    }
+    if (winner === 'computer') {
+      scoreMessage.textContent = `${capitalizeFirstLetter(
+        playerSelection
+      )} is beaten by ${computerSelection.toLowerCase()}`
+      return
+    }
+  
+    scoreMessage.textContent = `${capitalizeFirstLetter(
+      playerSelection
+    )} ties with ${computerSelection.toLowerCase()}`
+  }
+  
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+  }
+  
+  function openEndgameModal() {
+    endgameModal.classList.add('active')
+    overlay.classList.add('active')
+  }
+  
+  function closeEndgameModal() {
+    endgameModal.classList.remove('active')
+    overlay.classList.remove('active')
+  }
 
-rockButton.addEventListener('click', readyPlayerOne);
-paperButton.addEventListener('click', readyPlayerOne);
-scissorButton.addEventListener('click', readyPlayerOne);
+  function setFinalMessage() {
+    return playerScore>computerScore
+        ? (endgameMsg.textContent='You won!')
+        : (endgameMsg.textContent='You lost')
+  }
+
+function restartGame() {
+    playerScore=0;
+    computerScore=0;
+    drawScore=0;
+    scoreInfo.textContent='Choose';
+    scoreMessage.textContent='First to Score 5 points wins the game';
+    playerScorePara.textContent='Player: 0';
+    computerScorePara.textContent='Computer: 0';
+    drawScorePara.textContent='Draw: 0';
+    playerSign.textContent='?';
+    computerSign.textContent='?';
+    endgameModal.classList.remove('active');
+    overlay.classList.remove('active');
+}

@@ -12,24 +12,41 @@
         <header class='header'>
             <h1>Rock Paper Scissor</h1>
         </header>
-        <article class = 'selection'>
-            <section>
-                <button type='button' value='rock' class='rock'>Rock</button>
-            </section>
-            <section>
-                <button type='button' value='paper' class='paper'>Paper</button>
-            </section>
-            <section>
-                <button type='button' value='Scissor' class='Scissor'>Scissor</button>
-            </section>
-        </article>
-        <article class='outcome'>
-            <h4 class='player'>Player 1 score: <span class='playerPicked'></span></h4>
-            <h4 class='draw'> Draw Count: <span class='drawCount'></span></h4>
-            <h4 class='computer'>Player 2 Score: <span class='compPicked'></span></h4>
-        </article>
+        <main class ="main">
+            <div class ="scoreboard">
+                <h2 class ="score-info" id="scoreInfo">Choose Rock, Paper or Scissors</h2>
+                <h3 class="score-message" id="scoreMessage">
+                    First to score x points wins the game
+                </h3>
+                <div class ="scores-container">
+                    <div class="score-box">
+                        <p class="score" id="playerScore">Player: 0</p>
+                    </div>
+                    <div class="score-box">
+                        <p class="score" id ="drawScore">Draw: 0</p>
+                    </div>
+                    <div class ="score-box">
+                        <p class="score" id ="computerScore">Computer: 0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-square" id="rockBtn">
+                    <div class="sign">Rock</div>
+                </button>
+                <button class="btn btn-square" id="paperBtn">
+                    <div class="sign">Paper</div>
+                </button>
+                <button class="btn btn-square" id="scissorsBtn">
+                    <div class="sign">Scissors</div>
+                </button>
+            </div>
+        </main>
+        <div class="modal" id="endgameModal">
+            <p class = "modal-title" id="endgameMsg"></p>
+            <button class="btn btn-restart" id="restartBtn">Play again</button>
         </div>
-        <script src="script.js" async defer></script>
-    
-</body>
+        <div class="overlay" id="overlay"></div>
+        <script src="script.js"></script>
+    </body>
 </html>
