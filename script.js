@@ -53,24 +53,24 @@ function readyPlayerOne (e) {
                 return updatePlayerOneScore();
             }
             break;
-            case 'paper':
-                if(computersTurn()==='paper'){
-                    return draw();
-                } else if(computersTurn()==='scissor'){
-                    return updatePlayerTwoScore();
-                } else if(computersTurn()==='rock'){
-                    return updatePlayerOneScore();
-                }
-            break;
-            case 'scissor':
-                if(computersTurn() === 'scissor'){
-                    return draw();
-                } else if(computersTurn() === 'rock'){
-                    return updatePlayerTwoScore();
-                } else if(computersTurn() === 'paper'){
-                    return updatePlayerOneScore();
-                }
-            break;
+        case 'paper':
+            if(computersTurn()==='paper'){
+                return draw();
+            } else if(computersTurn()==='scissor'){
+                return updatePlayerTwoScore();
+            } else if(computersTurn()==='rock'){
+                return updatePlayerOneScore();
+            }
+        break;
+        case 'scissor':
+            if(computersTurn() === 'scissor'){
+                return draw();
+            } else if(computersTurn() === 'rock'){
+                return updatePlayerTwoScore();
+            } else if(computersTurn() === 'paper'){
+                return updatePlayerOneScore();
+            }
+        break;
     };
 };
 
